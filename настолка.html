@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		.line {
+			width: 1600px;
+			height: 100px;
+			display: flex;
+		}
+		.main {
+			width: 1600px;
+			height: 600px;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 200px;
+		}
+		body {
+			background-image: url(локация.jpg);
+			background-size: 100% auto;
+		}
+		.font {
+			font-family: arial;
+			font-size: 40px;
+			width: 1000px;
+			height: 50px;
+			text-align: center;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 20px;
+		}
+		.button {
+			font-family: arial;
+			font-size: 20px;
+			width: 200px;
+			height: 30px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<h1 class="font">Помоги дикому выбраться из военной базы!</h1>
+	<h1 class="font">HP: <span class="hp">440</span></h1>
+	<h1 class="font">Ценность лута: <span class="cost">0</span>к</h1>
+	<div style="margin-left: auto;margin-right: auto;width: 200px;">
+		<button class="button">Бросить кубики</button>
+	</div>
+	<div class="main">
+		<div class="line" id="line1"></div>
+		<div class="line" id="line2"></div>
+		<div class="line" id="line3"></div>
+		<div class="line" id="line4"></div>
+		<div class="line" id="line5"></div>
+		<div class="line" id="line6"></div>
+	</div>
+</body>
+<script>
+	let hp = 440
+	let move = 0
+	let cost = 0
+	let createBox = function (left, top, type) {
+		let box = document.createElement("div")
+		let target = document.querySelector('#line' + type)
+		line = "line" + type
+		target.insertAdjacentElement('beforeEnd', box)
+		box.classList.add("box")
+		box.style.width = "100px"
+		box.style.height = "100px"
+		box.style.left = left + "px"
+		box.style.top = top + "px"
+		box.style.position = "absolute"
+		box.style.boxSizing = "border-box"
+		box.style.border = "1px solid black"
+		box.style.backgroundSize = "100% 130%";
+	}
+	for (let i = 0; i < 16; i++) {
+		createBox(475+100*i, 300, "1")
+	}
+	for (let i = 0; i < 1; i++) {
+		createBox(475+1500, 400, "2")
+		createBox(475+1500, 500, "3")
+		createBox(475+1500, 600, "4")
+		createBox(475+1500, 700, "5")
+	}
+	for (let i = 16; i > 0; i--) {
+		createBox(375+100*i, 800, "6")
+	}
+	for (let i = 0; i < 4; i++) {
+		createBox(475, 700-100*i, "6")
+	}
+	let randomizer = function (arg) {
+		let random = Math.random() * arg
+		let round = Math.round(random) + 150
+		return round
+	}
+	let boxes = document.querySelectorAll('.box')
+	let dikiy = document.querySelector('.dikiy')
+	boxes[0].style.backgroundImage = "url(дикий.png)"
+	boxes[4].style.backgroundImage = "url(salewa.webp)"
+	boxes[4].style.backgroundSize = "100% 100%"
+	boxes[11].style.backgroundImage = "url(ScavRaider.webp)"
+	boxes[11].style.backgroundSize = "100% 100%"
+	boxes[13].style.backgroundImage = "url(gpu.webp)"
+	boxes[13].style.backgroundSize = "100% 100%"
+	boxes[16].style.backgroundImage = "url(Glukhar.webp)"
+	boxes[16].style.backgroundSize = "110% 100%"
+	boxes[23].style.backgroundImage = "url(pmc.jpg)"
+	boxes[23].style.backgroundSize = "110% 250%"
+	boxes[26].style.backgroundImage = "url(salewa.webp)"
+	boxes[26].style.backgroundSize = "100% 100%"	
+	boxes[30].style.backgroundImage = "url(gpu.webp)"
+	boxes[31].style.backgroundImage = "url(gpu.webp)"
+	boxes[30].style.backgroundSize = "100% 100%"
+	boxes[31].style.backgroundSize = "100% 100%"
+	boxes[34].style.backgroundImage = "url(scav.jpg)"
+	boxes[34].style.backgroundSize = "110% 200%"
+	checkList = ["true","true","true","true","true","true","true","true","true"]
+	document.querySelector('.button').onclick = function () {
+		let random = Math.random() * 5
+		let round = Math.round(random) + 1
+		alert("Кубики брошены - " + round)
+		boxes[move].style.backgroundImage = "none"
+		move = move + round
+		if (move > 39) {
+			move = move - 40
+			if (cost > 0) {
+				alert("Ты выжил!")
+				document.querySelector('.button').style.display = "none"
+				boxes[move].style.backgroundImage = "none"
+			}
+		}
+		boxes[move].style.backgroundImage = "url(дикий.png)"
+		if (move == 4 & checkList[0] == "true") {
+			boxes[4].style.backgroundSize = "100% 130%"
+			if (hp + 85 > 440) {
+				hp = 440
+			}
+			else {
+				hp = hp + 85
+			}
+			document.querySelector('.hp').innerHTML = hp
+			checkList[0] = "false"
+		}
+		if (move == 26 & checkList[1] == "true") {
+			boxes[26].style.backgroundSize = "100% 130%"
+			if (hp + 85 > 440) {
+				hp = 440
+			}
+			else {
+				hp = hp + 85
+			}
+			document.querySelector('.hp').innerHTML = hp
+			checkList[1] = "false"
+		}
+		if (move == 11 & checkList[5] == "true") {
+			hp = hp - randomizer(400)
+			if (hp < 1) {
+				alert("Ты умер!")
+				document.querySelector('.hp').innerHTML = 0
+				document.querySelector('.button').style.display = "none"
+				boxes[move].style.backgroundImage = "none"				
+			}
+			else {
+				document.querySelector('.hp').innerHTML = hp
+			}
+			checkList[5] = "false"
+		}
+		if (move == 16 & checkList[6] == "true") {
+			hp = hp - randomizer(400)
+			if (hp < 1) {
+				alert("Ты умер!")
+				document.querySelector('.hp').innerHTML = 0
+				document.querySelector('.button').style.display = "none"
+				boxes[move].style.backgroundImage = "none"				
+			}
+			else {
+				document.querySelector('.hp').innerHTML = hp
+			}
+			checkList[6] = "false"
+		}
+		if (move == 23 & checkList[7] == "true") {
+			hp = hp - randomizer(400)
+			if (hp < 1) {
+				alert("Ты умер!")
+				document.querySelector('.hp').innerHTML = 0
+				document.querySelector('.button').style.display = "none"
+				boxes[move].style.backgroundImage = "none"				
+			}
+			else {
+				document.querySelector('.hp').innerHTML = hp
+			}
+			checkList[7] = "false"	
+		}
+		if (move == 34 & checkList[8] == "true") {
+			hp = hp - randomizer(400)
+			if (hp < 1) {
+				alert("Ты умер!")
+				document.querySelector('.hp').innerHTML = 0
+				document.querySelector('.button').style.display = "none"
+				boxes[move].style.backgroundImage = "none"				
+			}
+			else {
+				document.querySelector('.hp').innerHTML = hp
+			}
+			checkList[8] = "false"
+		}
+		if (move == 13 & checkList[2] == "true") {
+			cost = cost + 400
+			document.querySelector('.cost').innerHTML = cost
+			checkList[2] = "false"
+		}
+		if (move == 30 & checkList[3] == "true") {
+			cost = cost + 400
+			document.querySelector('.cost').innerHTML = cost
+			checkList[3] = "false"
+		}
+		if (move == 31 & checkList[4] == "true") {
+			cost = cost + 400
+			document.querySelector('.cost').innerHTML = cost
+			checkList[4] = "false"
+		}
+	}
+</script>
+</html>
